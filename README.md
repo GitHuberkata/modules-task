@@ -11,17 +11,17 @@
 Creation of 2 resources (key pairs) in two different regions. 
 
 ### Instructions
-A subfolder `modules` is created in the root folder. In it we have `key-pairs.tf` file created. It contains the resource to be created and the required providers.
+In the root folder we create subfolder `modules`. In it we create `key-pairs.tf`. It contains the block for the resource to be created and the required providers.
 
-In the `main.tf` in the root folder we call the modules as follows:
+In the `main.tf` in the root folder we call the resource module as follows:
 ```
 module "modules" {
     source = "../working-with-modules/modules"
 }
 ```
-As we need to crete 2 key pairs in 2 different regions we need to call the resource module twice for each region.
+As we need to crete 2 key pairs in 2 different regions we need to call the resource module twice - once per each region.
 
-We need to use meta-argument `providers` in the 2 module blocks:
+We need to use meta-argument `providers` in the 2 module blocks where to add the respective region:
 
 ```
 module "keypair-west" {
