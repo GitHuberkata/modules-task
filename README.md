@@ -1,4 +1,4 @@
-# A sample repo to demonstrate work with code split in modules
+# A sample repo to demonstrate work with modules
 
 ### Prerequisites
 
@@ -8,13 +8,10 @@
 
 ### Use case 
 
-Creation of 2 resources (ec2 and security group) in two different regions. 
+Creation of 2 resources (key pairs) in two different regions. 
 
 ### Instructions
-A subfolder `modules` is created in the root folder. In it we have 3 files:
-- `providers.tf` - the code for the regions where the resources to be provisioned
-- `ec2.tf` - the configuration of the ec2 
-- `security-gr.tf` - the configuration for the security group creation
+A subfolder `modules` is created in the root folder. In it we have `key-pairs.tf` file created. It contains the resource to be created and the required providers.
 
 In the `main.tf` in the root folder we call the modules as follows:
 ```
@@ -22,6 +19,25 @@ module "modules" {
     source = "../working-with-modules/modules"
 }
 ```
+As we need to crete 2 key pairs in 2 different regions we need to call the resource module twice for each region.
+
+We need to use meta-argument `providers` in the 2 module blocks:
+
+```
+module "keypair-west" {
+  source = "../working-with-modules/modules"
+  providers = { aws = aws.west
+  }
+
+}
+
+module "keypair-east" {
+  source = "../working-with-modules/modules"
+  providers = { aws = aws.east
+  }
+}
+```
+
 ### How to use
 1. Clone the repo
 ```
@@ -35,5 +51,5 @@ git clone https://github.com/GitHuberkata/working-with-modules.git
 - `terraform plan`
 - `terraform apply`
 
-After the `apply` we will have one ec2 instance created in region `us-east-1` and one security group in region `us-west-2`.
+After the `apply` we will have 2 key pairs created in region `us-east-1` and in region `us-west-2`.
 
